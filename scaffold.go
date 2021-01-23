@@ -3,6 +3,7 @@ package scaffold
 import (
 	"context"
 	"errors"
+	"log"
 
 	"github.com/gin-gonic/gin"
 	"github.com/jackc/pgx/v4/pgxpool"
@@ -52,6 +53,11 @@ func NewFromConfigFile(file string) (*WebappScaffold, error) {
 		return nil, err
 	}
 
+	if scaffold.config.GlobalConfig.Debug {
+		log.Println("[DEBUG] config loaded. Content:")
+		log.Println("[DEBUG] ", scaffold.config)
+	}
+
 	if err := initGin(scaffold); err != nil {
 		return nil, err
 	}
@@ -76,6 +82,15 @@ func initPg(scaffold *WebappScaffold) (err error) {
 }
 
 func initGin(scaffold *WebappScaffold) error {
+	if scaffold.config.GinConfig.ReleaseMode {
+		gin.SetMode(gin.ReleaseMode)
+	}
+
 	scaffold.g = gin.New()
+
+	for _, v := range scaffold.config.GinConfig.HtmlGlobPaths {
+		scaffold.g.LoadHTMLGlob(v)
+	}
+
 	return nil
 }

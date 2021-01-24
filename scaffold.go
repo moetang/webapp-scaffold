@@ -49,6 +49,7 @@ func startPg(scaffold *WebappScaffold) (err error) {
 }
 
 func (w *WebappScaffold) Shutdown() error {
+	w.pgPool.Close()
 	//FIXME need to implement
 	panic("implement me")
 }

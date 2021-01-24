@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"log"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/jackc/pgx/v4/pgxpool"
@@ -116,5 +117,31 @@ func startGin(scaffold *WebappScaffold) (err error) {
 	for _, v := range scaffold.config.GinConfig.HtmlGlobPaths {
 		scaffold.g.LoadHTMLGlob(v)
 	}
+
+	// debug mode: reload html glob files
+	if !scaffold.config.GinConfig.ReleaseMode {
+		go func() {
+			ti := time.NewTicker(5 * time.Second)
+			for {
+				select {
+				case <-ti.C:
+					f := func() {
+						defer func() {
+							e := recover()
+							if e != nil {
+								log.Println("[ERROR] reload html glob fail:", e)
+							}
+						}()
+						for _, v := range scaffold.config.GinConfig.HtmlGlobPaths {
+							scaffold.g.LoadHTMLGlob(v)
+						}
+					}
+					f()
+					log.Println("[DEBUG] html glob refreshed.")
+				}
+			}
+		}()
+	}
+
 	return
 }

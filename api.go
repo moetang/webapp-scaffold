@@ -5,6 +5,11 @@ import (
 	"github.com/jackc/pgx/v4/pgxpool"
 )
 
+type ScaffoldLifecycle interface {
+	SyncStart() error
+	Shutdown() error
+}
+
 type GinApi interface {
 	GetGin() *gin.Engine
 }

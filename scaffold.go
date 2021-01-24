@@ -13,6 +13,7 @@ import (
 
 var ErrNotEnabled = errors.New("feature not enabled")
 
+var _ ScaffoldLifecycle = new(WebappScaffold)
 var _ GinApi = new(WebappScaffold)
 var _ PostgresApi = new(WebappScaffold)
 
@@ -22,6 +23,15 @@ type WebappScaffold struct {
 
 	osFs   afero.Fs
 	config WebappScaffoldConfig
+}
+
+func (w *WebappScaffold) SyncStart() error {
+	return w.g.Run(w.config.GinConfig.Listen)
+}
+
+func (w *WebappScaffold) Shutdown() error {
+	//FIXME need to implement
+	panic("implement me")
 }
 
 func (w *WebappScaffold) GetPostgresPool() *pgxpool.Pool {

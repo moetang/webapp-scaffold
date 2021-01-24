@@ -5,7 +5,7 @@ type WebappScaffoldConfig struct {
 		Debug bool `toml:"debug"`
 	} `toml:"global"`
 	GinConfig struct {
-		ReleaseMode   bool     `toml:"release_mod"`
+		ReleaseMode   bool     `toml:"release_mode"`
 		HtmlGlobPaths []string `toml:"html_glob_paths"`
 		Listen        string   `toml:"listen" default:":6001"`
 	} `toml:"gin"`

@@ -26,7 +26,26 @@ type WebappScaffold struct {
 }
 
 func (w *WebappScaffold) SyncStart() error {
+	if err := startPg(w); err != nil {
+		return err
+	}
+	if err := startGin(w); err != nil {
+		return err
+	}
+
 	return w.g.Run(w.config.GinConfig.Listen)
+}
+
+func startPg(scaffold *WebappScaffold) (err error) {
+	if !scaffold.config.PgConfig.Enable {
+		return
+	}
+
+	scaffold.pgPool, err = pgxpool.Connect(context.Background(), scaffold.config.PgConfig.PostgresConnectString)
+	if err != nil {
+		return
+	}
+	return
 }
 
 func (w *WebappScaffold) Shutdown() error {
@@ -79,15 +98,6 @@ func NewFromConfigFile(file string) (*WebappScaffold, error) {
 }
 
 func initPg(scaffold *WebappScaffold) (err error) {
-	if !scaffold.config.PgConfig.Enable {
-		return nil
-	}
-
-	scaffold.pgPool, err = pgxpool.Connect(context.Background(), scaffold.config.PgConfig.PostgresConnectString)
-	if err != nil {
-		return err
-	}
-
 	return nil
 }
 
@@ -98,9 +108,12 @@ func initGin(scaffold *WebappScaffold) error {
 
 	scaffold.g = gin.New()
 
+	return nil
+}
+
+func startGin(scaffold *WebappScaffold) (err error) {
 	for _, v := range scaffold.config.GinConfig.HtmlGlobPaths {
 		scaffold.g.LoadHTMLGlob(v)
 	}
-
-	return nil
+	return
 }

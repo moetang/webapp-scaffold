@@ -11,9 +11,17 @@ This is a scaffold for moetang projects.
 * [x] Toml: [github.com/pelletier/go-toml](https://github.com/pelletier/go-toml)
 * [x] Gin: [github.com/gin-gonic/gin](https://github.com/gin-gonic/gin)
 
+## Features
+
+TBD
+
 ## TODO List
 
 * [ ] User/Identity integration
 * [ ] Session framework
 * [ ] Multiple language
+
+## Addons
+
+* [x] pg query orm: struct tag - "mx.orm"
 

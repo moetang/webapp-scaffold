@@ -10,6 +10,8 @@ import (
 	"github.com/jackc/pgtype/pgxtype"
 )
 
+var ErrNoRecordFound = errors.New("no record found by QuerySingle")
+
 // allowed parameter type: *[]struct{} or *[]*struct{}
 func QueryMulti(db pgxtype.Querier, result interface{}, ctx context.Context, sql string, params ...interface{}) error {
 	if !checkOrmQueryMultiParamType(result) {
@@ -93,7 +95,8 @@ func QuerySingle(db pgxtype.Querier, result interface{}, ctx context.Context, sq
 		if err != nil {
 			panic(err)
 		}
+		return nil
 	}
 
-	return nil
+	return ErrNoRecordFound
 }

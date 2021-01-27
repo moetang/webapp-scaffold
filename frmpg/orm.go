@@ -7,11 +7,11 @@ import (
 
 	"github.com/moetang/webapp-scaffold/utils"
 
-	"github.com/jackc/pgx/v4/pgxpool"
+	"github.com/jackc/pgtype/pgxtype"
 )
 
 // allowed parameter type: *[]struct{} or *[]*struct{}
-func QueryMulti(db *pgxpool.Pool, result interface{}, ctx context.Context, sql string, params ...interface{}) error {
+func QueryMulti(db pgxtype.Querier, result interface{}, ctx context.Context, sql string, params ...interface{}) error {
 	if !checkOrmQueryMultiParamType(result) {
 		return errors.New("result type is not *[]struct{} or *[]*struct{}")
 	}
@@ -55,7 +55,7 @@ func QueryMulti(db *pgxpool.Pool, result interface{}, ctx context.Context, sql s
 }
 
 // allowed parameter type: *struct{}
-func QuerySingle(db *pgxpool.Pool, result interface{}, ctx context.Context, sql string, params ...interface{}) error {
+func QuerySingle(db pgxtype.Querier, result interface{}, ctx context.Context, sql string, params ...interface{}) error {
 	t := reflect.TypeOf(result)
 	if t.Kind() != reflect.Ptr || t.Elem().Kind() != reflect.Struct {
 		return errors.New("result type is not *struct{}")

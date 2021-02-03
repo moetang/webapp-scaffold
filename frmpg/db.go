@@ -33,9 +33,8 @@ func DoTxDefault(db *pgxpool.Pool, f func(tx pgx.Tx) error) (err error) {
 
 	err = f(tx)
 	if err != nil {
-		err = tx.Rollback(context.Background())
-		if err != nil {
-			log.Println("[ERROR] rollback db transaction failed.", err)
+		if e := tx.Rollback(context.Background()); e != nil {
+			log.Println("[ERROR] rollback db transaction failed.", e)
 		}
 	}
 	return

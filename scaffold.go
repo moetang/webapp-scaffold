@@ -99,6 +99,21 @@ func NewFromConfigFile(file string) (*WebappScaffold, error) {
 	return scaffold, nil
 }
 
+func ReadCustomConfig(file string, s interface{}) error {
+	fs := afero.NewOsFs()
+
+	f, err := fs.Open(file)
+	if err != nil {
+		return err
+	}
+	configData, err := afero.ReadAll(f)
+	if err != nil {
+		return err
+	}
+
+	return toml.Unmarshal(configData, s)
+}
+
 func initPg(scaffold *WebappScaffold) (err error) {
 	return nil
 }

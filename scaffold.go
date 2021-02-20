@@ -6,6 +6,8 @@ import (
 	"log"
 	"time"
 
+	"github.com/moetang/webapp-scaffold/frmgin"
+
 	"github.com/gin-gonic/gin"
 	"github.com/jackc/pgx/v4/pgxpool"
 	"github.com/pelletier/go-toml"
@@ -124,6 +126,8 @@ func initGin(scaffold *WebappScaffold) error {
 	}
 
 	scaffold.g = gin.New()
+	// init builtin func
+	frmgin.InitBuiltinFunc(scaffold.g)
 
 	return nil
 }

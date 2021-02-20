@@ -124,6 +124,9 @@ func initGin(scaffold *WebappScaffold) error {
 	if scaffold.config.GinConfig.ReleaseMode {
 		gin.SetMode(gin.ReleaseMode)
 	}
+	if scaffold.config.GinConfig.StaticPathMapping == nil {
+		scaffold.config.GinConfig.StaticPathMapping = make(map[string]string)
+	}
 
 	scaffold.g = gin.New()
 	// init builtin func
@@ -135,6 +138,9 @@ func initGin(scaffold *WebappScaffold) error {
 func startGin(scaffold *WebappScaffold) (err error) {
 	for _, v := range scaffold.config.GinConfig.HtmlGlobPaths {
 		scaffold.g.LoadHTMLGlob(v)
+	}
+	for k, v := range scaffold.config.GinConfig.StaticPathMapping {
+		scaffold.g.Static(k, v)
 	}
 
 	// debug mode: reload html glob files

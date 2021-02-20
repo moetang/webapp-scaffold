@@ -5,9 +5,10 @@ type WebappScaffoldConfig struct {
 		Debug bool `toml:"debug"`
 	} `toml:"global"`
 	GinConfig struct {
-		ReleaseMode   bool     `toml:"release_mode"`
-		HtmlGlobPaths []string `toml:"html_glob_paths"`
-		Listen        string   `toml:"listen" default:":6001"`
+		ReleaseMode       bool              `toml:"release_mode"`
+		HtmlGlobPaths     []string          `toml:"html_glob_paths"`
+		Listen            string            `toml:"listen" default:":6001"`
+		StaticPathMapping map[string]string `toml:"static_path_mapping"`
 	} `toml:"gin"`
 	PgConfig struct {
 		Enable                bool   `toml:"enable" default:"false"`

@@ -20,7 +20,11 @@ func SimpleFormatRichText(s string) string {
 	var sb strings.Builder
 	for _, v := range ss {
 		sb.WriteString("<p>")
-		sb.WriteString(v)
+		if len(v) > 0 {
+			sb.WriteString(v)
+		} else {
+			sb.WriteString("&nbsp;")
+		}
 		sb.WriteString("</p>")
 	}
 	return sb.String()

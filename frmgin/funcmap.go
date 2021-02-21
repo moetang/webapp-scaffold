@@ -19,13 +19,13 @@ func SimpleFormatRichText(s string) string {
 	ss := strings.Split(s, "\n")
 	var sb strings.Builder
 	for _, v := range ss {
-		sb.WriteString("<p>")
 		if len(v) > 0 {
+			sb.WriteString("<p>")
 			sb.WriteString(v)
+			sb.WriteString("</p>")
 		} else {
-			sb.WriteString("&nbsp;")
+			sb.WriteString("<br>")
 		}
-		sb.WriteString("</p>")
 	}
 	return sb.String()
 }

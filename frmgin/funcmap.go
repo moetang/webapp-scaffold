@@ -19,7 +19,7 @@ func SimpleFormatRichText(s string) string {
 	ss := strings.Split(s, "\n")
 	var sb strings.Builder
 	for _, v := range ss {
-		if len(v) > 0 {
+		if len(strings.TrimSpace(v)) > 0 {
 			sb.WriteString("<p>")
 			sb.WriteString(v)
 			sb.WriteString("</p>")

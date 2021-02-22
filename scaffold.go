@@ -26,11 +26,24 @@ type WebappScaffold struct {
 
 	osFs   afero.Fs
 	config WebappScaffoldConfig
+
+	dbStart bool
+}
+
+func (w *WebappScaffold) PreInitDb() error {
+	if !w.dbStart {
+		if err := startPg(w); err != nil {
+			return err
+		}
+	}
+	return nil
 }
 
 func (w *WebappScaffold) SyncStart() error {
-	if err := startPg(w); err != nil {
-		return err
+	if !w.dbStart {
+		if err := startPg(w); err != nil {
+			return err
+		}
 	}
 	if err := startGin(w); err != nil {
 		return err
